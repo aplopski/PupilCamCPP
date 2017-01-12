@@ -3,6 +3,7 @@ interface for capture of Pupil labs cameras with C++
 
 The framework handles the pupillabs cameras (https://github.com/pupil-labs/) with asynchronous input on windows
 It is based on pyuvc example by Pupil labs (https://github.com/pupil-labs/pyuvc)
+
 Requirement:
 - libusbK enabled pupil-labs cameras (https://github.com/pupil-labs/pupil/wiki/Windows-Driver-Setup)
 - libusb (https://github.com/pupil-labs/libusb)
@@ -12,8 +13,9 @@ Requirement:
 
 Steps:
 
-1. make sure that the header files are in correct locations, as specified in the CmakeLists.txt files
+1. Make sure that the header files are in correct locations, as specified in the CmakeLists.txt files
 2. Build and link the library
+3. Enjoy
 
 Example code can be found in example.cpp
 
