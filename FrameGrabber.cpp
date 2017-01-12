@@ -5,6 +5,10 @@ https://github.com/pupil-labs/pyuvc
 handles camera opening/closing in windows for libusbK
 handles camera frame grabs - return openCV frames
 
+Copyright
+Alexander Plopski
+NAIST Interactive Media Design Laboratory
+12.01.2017
 */
 
 #include "FrameGrabber.hpp"
@@ -98,15 +102,12 @@ Camera::startStream(int _height, int _width, int _fps, int _channels, float _ban
     printf("incorrect number of channels, must be 1 for grayscale and 3 for bgr");
     return -1;
   }
-
   if (strmh != NULL)
   {
     stopStream();
   }
-
   uvc_error_t status = uvc_get_stream_ctrl_format_size(devh, &ctrl,
                                UVC_FRAME_FORMAT_COMPRESSED, _width, _height, _fps);
-  fflush(stderr);
   if (status != UVC_SUCCESS)
   {
     uvc_perror(status, "Can't get stream control");
@@ -114,24 +115,20 @@ Camera::startStream(int _height, int _width, int _fps, int _channels, float _ban
   }
   uvc_print_stream_ctrl(&ctrl, stderr);
   fflush(stderr);
-  //std::cout << sizeof(*strmh) << "\n";
   status = uvc_stream_open_ctrl(devh, &strmh, &ctrl);
-  fflush(stderr);
   if (status != UVC_SUCCESS)
   {
     uvc_perror(status, "failed to open stream ctrl\n");
+    strmh = NULL;
     return -1;
   }
-  fflush(stderr);
-  printf("starting stream");
   status = uvc_stream_start(strmh, NULL, NULL, _bandwidth_factor, 0);
-  fflush(stderr);
   if (status != UVC_SUCCESS)
   {
     uvc_perror(status, "Can't start isochronous stream \n");
+    strmh = NULL;
     return -1;
   }
-  fflush(stderr);
   sleepDuration = 1000.0 / _fps;
   frame = new Frame(_height, _width, _channels);
   killThread = false;
@@ -207,6 +204,7 @@ PupilCameraResults Camera::stopStream()
   }
   uvc_stream_close(strmh);
   printf("Log: stream closed");
+  strmh = NULL;
   delete frame;
   return PupilCameraResults::SUCCESS;
 }

@@ -4,7 +4,7 @@ implements all processing of the frames from the captured camera stream
 Copyright
 Alexander Plopski
 NAIST Interactive Media Design Laboratory
-26.12.2016
+12.01.2017
 */
 #include "FrameGrabber.hpp"
 using namespace PupilCamera;

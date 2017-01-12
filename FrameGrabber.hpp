@@ -9,7 +9,7 @@ handles camera frame grabs - return openCV frames
 Copyright
 Alexander Plopski
 NAIST Interactive Media Design Laboratory
-26.12.2016
+12.01.2017
 */
 
 //#pragma once
