@@ -1,0 +1,3 @@
+# - Config file for the libuvc package
+set(pupilcam_INCLUDE_DIRS "@CONF_INCLUDE_DIR@")
+set(pupilcam_LIBRARIES "@CONF_LIBRARY@")
