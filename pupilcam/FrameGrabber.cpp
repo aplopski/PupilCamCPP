@@ -258,16 +258,19 @@ Camera_Manager::update(std::vector<std::string> &cameras)
 int
 Camera_Manager::retrieveCameraList()
 {
+  printf("retrieving\n");
   foundCameras.clear();
   openCameras.clear();
   if (ctx == NULL)
   {
+    printf("initializing\n");
     if (init() == -1)
     {
       printf("failed to initialize context\ in updaten");
       return -1;
     }
   }
+
   if (uvc_get_device_list(ctx, &dev_list) == -1)
   {
     printf("could not get devices list.\n");
@@ -298,7 +301,7 @@ Camera_Manager::retrieveCameraList()
     openCameras.push_back(std::pair<int, Camera*>(id, new Camera()));
     uvc_free_device_descriptor(desc);
     id++;
-    
+    printf("id: %d\n", id);
   }
   
   std::cout << "number pupil cameras: " << foundCameras.size() << "\n";
@@ -367,7 +370,7 @@ Camera_Manager::grabFrame(int id, cv::Mat &image)
 
 
 PupilCameraResults
-Camera_Manager::stopSream(int id)
+Camera_Manager::stopStream(int id)
 {
   return openCameras[id].second->stopStream();
 }

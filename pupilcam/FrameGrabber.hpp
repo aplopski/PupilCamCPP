@@ -21,7 +21,7 @@ NAIST Interactive Media Design Laboratory
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include <libuvc/libuvc.h>
-#include <turbojpeg.h>
+#include <turbojpeg/turbojpeg.h>
 #include <thread>
 #include <chrono>
 #include <future>
@@ -131,7 +131,7 @@ namespace PupilCamera
       PupilCameraResults openCamera(int id);
       PupilCameraResults startStream(int id, int height_ = 480, int width_ = 640, int fps_ = 120, int channels_ = 1, float bandwidth_factor_ = 1.3);
       PupilCameraResults grabFrame(int id, cv::Mat& image);
-      PupilCameraResults stopSream(int id);
+      PupilCameraResults stopStream(int id);
 
       PupilCameraResults openCamera(std::string uid);
     private:
