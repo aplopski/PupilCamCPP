@@ -11,7 +11,7 @@ NAIST Interactive Media Design Laboratory
 
 #include <pupilcam/FrameGrabber.hpp>
 
-const int exposure_max = (int)((1.f/3) / 0.0001);
+const int exposure_max = (int)((1.f/3) / 0.0001); //convert from seconds into multiple of 0.1ms
 
 int main(int argc, char** argv)
 {
@@ -71,6 +71,8 @@ int main(int argc, char** argv)
     {
       if (dir)
       {
+        //setExposureTime takes the camera and the exposure duration in seconds
+        //convert the trackbar value into seconds
         PupilCamera::PupilCameraResults status = manager->setExposureTime(i, exposure[i] * 0.0001f);
         if (status != PupilCamera::PupilCameraResults::SUCCESS)
         {
@@ -84,6 +86,7 @@ int main(int argc, char** argv)
 	  key = cv::waitKey(10);
     if (key == 'u')
     {
+      //reset the exposure time, the value on te trackbar does not correspond to the default exposure time
       manager->resetAutoExposure(0);
       exposure[0] = (int)((1.f / 60) / 0.0001);
     }
