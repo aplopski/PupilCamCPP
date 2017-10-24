@@ -14,7 +14,7 @@ set(pupilcam_VERSION_MAJOR 0)
 set(pupilcam_VERSION_MINOR 0)
 set(pupilcam_VERSION_PATCH 1)
 set(pupilcam_VERSION ${pupilcam_VERSION_MAJOR}.${pupilcam_VERSION_MINOR}.${pupilcam_VERSION_PATCH})
-find_package(OpenCV REQUIRED core)
+find_package(OpenCV REQUIRED)
 
 find_path(JPEG_INCLUDE_DIR turbojpeg/jpeglib.h turbojpeg/turbojpeg.h
           PATHS C:/3rdparty/jpegturbo/include)
