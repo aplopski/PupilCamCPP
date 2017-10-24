@@ -18,6 +18,11 @@ int main(int argc, char** argv)
   std::vector<std::string> cameras;
   manager->update(cameras);
   std::cout << "number of cameras:" << cameras.size() << "\n";
+  if (cameras.empty())
+  {
+	  delete manager;
+	  return 0;
+  }
   for (int i = 0; i < cameras.size(); ++i)
   {
     PupilCamera::PupilCameraResults status = manager->openCamera(i);
