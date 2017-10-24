@@ -97,6 +97,8 @@ namespace PupilCamera
     PupilCameraResults stopStream();
     PupilCameraResults getLastFrame(cv::Mat &img);
     bool isOpen();
+    PupilCameraResults resetAutoExposure();
+    PupilCameraResults setExposure(float duration);
   private:
     
     uvc_device_handle_t *devh;
@@ -132,6 +134,9 @@ namespace PupilCamera
       PupilCameraResults startStream(int id, int height_ = 480, int width_ = 640, int fps_ = 120, int channels_ = 1, float bandwidth_factor_ = 1.3);
       PupilCameraResults grabFrame(int id, cv::Mat& image);
       PupilCameraResults stopStream(int id);
+
+      PupilCameraResults resetAutoExposure(int id);
+      PupilCameraResults setExposureTime(int id, float duration);
 
       PupilCameraResults openCamera(std::string uid);
     private:

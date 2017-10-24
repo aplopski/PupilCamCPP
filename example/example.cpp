@@ -11,6 +11,8 @@ NAIST Interactive Media Design Laboratory
 
 #include <pupilcam/FrameGrabber.hpp>
 
+const int exposure_max = (int)((1.f/3) / 0.0001); //convert from seconds into multiple of 0.1ms
+
 int main(int argc, char** argv)
 {
   PupilCamera::Camera_Manager *manager = new PupilCamera::Camera_Manager();
@@ -40,6 +42,15 @@ int main(int argc, char** argv)
 
   cv::Mat tmp2;
   cv::RotatedRect tmp;
+
+  std::vector<int> exposure;
+  exposure.resize(cameras.size(), exposure_max);
+
+  for (int i = 0; i < cameras.size(); ++i)
+  {
+    cv::namedWindow(std::to_string(i));
+    cv::createTrackbar("exposure time", std::to_string(i), &exposure[i], exposure_max);
+  }
   while (key != 'n')
   {
     for (int i = 0; i < cameras.size(); ++i)
@@ -57,14 +68,33 @@ int main(int argc, char** argv)
   manager->openCamera(0);
   manager->startStream(0, 240, 320, 120, 1);
   key = 0;
+  float duration = 0.0001f;
+  int dir = 1;
   while (key != 'n')
   {
     for (int i = 0; i < cameras.size(); ++i)
     {
+      if (dir)
+      {
+        //setExposureTime takes the camera and the exposure duration in seconds
+        //convert the trackbar value into seconds
+        PupilCamera::PupilCameraResults status = manager->setExposureTime(i, exposure[i] * 0.0001f);
+        if (status != PupilCamera::PupilCameraResults::SUCCESS)
+        {
+          printf("error!\n");
+        }
+      }
       manager->grabFrame(i, tmp2);
       cv::imshow(std::to_string(i), tmp2);
+      std::cout << duration << "\n";
     }
-	key = cv::waitKey(10);
+	  key = cv::waitKey(10);
+    if (key == 'u')
+    {
+      //reset the exposure time, the value on te trackbar does not correspond to the default exposure time
+      manager->resetAutoExposure(0);
+      exposure[0] = (int)((1.f / 60) / 0.0001);
+    }
   }
   delete manager;
   return 0;

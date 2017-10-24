@@ -84,6 +84,61 @@ Camera::isOpen()
 }
 
 PupilCameraResults
+Camera::setExposure(float duration)
+{
+  if (!isOpen())
+  {
+    printf("no stream");
+    return PupilCameraResults::STREAM_NOT_RUNNING;
+  }
+  uvc_error_t result = uvc_set_ae_mode(devh, 1);//manual
+  if (result != UVC_SUCCESS)
+  {
+    printf("error setting mode %d\n", result);
+    return PupilCameraResults::FAILED;
+  }
+  result = uvc_set_ae_priority(devh, 0);
+  if (result != UVC_SUCCESS)
+  {
+    printf("error setting priority %d\n", result);
+    return PupilCameraResults::FAILED;
+  }
+  uint dur;
+  result = uvc_get_exposure_abs(devh, &dur, UVC_GET_CUR);
+  printf("duration1: %d\n", dur);
+  result = uvc_set_exposure_abs(devh, (uint)(duration/0.0001));
+  if (result != UVC_SUCCESS)
+  {
+    uvc_perror(result, "error setting time");
+    result = uvc_set_exposure_abs(devh, (uint)(dur));
+    return PupilCameraResults::FAILED;
+  }
+  return PupilCameraResults::SUCCESS;
+}
+
+PupilCameraResults
+Camera::resetAutoExposure()
+{
+  if (!isOpen())
+  {
+    return PupilCameraResults::STREAM_NOT_RUNNING;  
+  }
+  uvc_error_t result = uvc_set_ae_mode(devh, 1);
+  if (result != UVC_SUCCESS)
+  {
+    printf("failed to set exposure");
+    return PupilCameraResults::FAILED;
+  }
+  result = uvc_set_ae_priority(devh, 0);
+  uint dur;
+  result = uvc_get_exposure_abs(devh, &dur, UVC_GET_DEF);
+  result = uvc_set_exposure_abs(devh, dur);
+  printf("duration: %d\n", dur);
+
+  return PupilCameraResults::SUCCESS;
+}
+
+PupilCameraResults
 Camera::getLastFrame(cv::Mat &img)
 {
   if (frame == NULL)
@@ -357,6 +412,7 @@ Camera_Manager::startStream(int id, int height_, int width_, int fps_, int chann
   }
   return PupilCameraResults::STREAM_NOT_RUNNING;
 }
+
 PupilCameraResults
 Camera_Manager::grabFrame(int id, cv::Mat &image)
 {
@@ -374,6 +430,25 @@ Camera_Manager::stopStream(int id)
 {
   return openCameras[id].second->stopStream();
 }
+
+PupilCameraResults
+Camera_Manager::resetAutoExposure(int id)
+{
+  return openCameras[id].second->resetAutoExposure();
+}
+
+PupilCameraResults
+Camera_Manager::setExposureTime(int id, float duration)
+{
+  if (duration < 0.0001)
+  {
+    printf("exposure time must be at least 0.0001s\n");
+    return PupilCameraResults::FAILED;
+  }
+  return openCameras[id].second->setExposure(duration);
+}
+
+
 
 
 
