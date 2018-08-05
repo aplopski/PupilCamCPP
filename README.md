@@ -1,4 +1,4 @@
-# PupilCapture
+# PupilCaptureCPP
 interface for capture of Pupil labs cameras with C++
 
 The framework handles the pupillabs cameras (https://github.com/pupil-labs/) with asynchronous input on windows
